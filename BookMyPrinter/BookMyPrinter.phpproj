@@ -18,6 +18,7 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="rateStore.php" />
     <Compile Include="reservationInfo.php" />
     <Compile Include="storeAdmin.php" />
     <Compile Include="index_login.php" />

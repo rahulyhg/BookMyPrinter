@@ -13,7 +13,25 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/grayscale.css" rel="stylesheet" />
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.raty.js"></script>
     <script type="text/javascript">
+        var rateScore;
+        $(function () {
+            $("#stars").raty({
+                number: 5,
+                path: 'img',
+                starOn : 'star-on.png',  
+                starOff: 'star-off.png',
+                starHalf : 'star-half.png',
+                target: '#title', 
+                hints: ['很差', '一般', '還不錯', '很好', '滿意'],
+                click: function (score, evt) {
+                    rateScore = score;
+                }
+            });
+        });
+
         function fun1() {
             if (document.getElementById('printAll').value == "自訂列印頁數") {
                 document.getElementById("pageNumber").value = "請輸入頁數";
@@ -26,6 +44,26 @@
 
         function uploadFile() {
             window.open('https://script.google.com/macros/s/AKfycbzzfCpKIzJcWD90R7JtAzUZpUJOqeAi6GVuNAhGXYFEdISLvRU/exec', '上傳檔案系統', config='height=300,width=300');
+        }
+
+        function rateStore() {
+            $.ajax({
+                url: 'rateStore.php',
+                cache: false,
+                dataType: 'html',
+                type: 'POST',
+                data: {
+                    rateStoreName: $('#rateStoreName').val(),
+                    rateScore: rateScore
+                },
+                error: function (xhr) {
+                    alert('評分失敗');
+                },
+                success: function () {
+                    alert('評分成功');
+                }
+            });
+            
         }
 
         function initial() {
@@ -107,6 +145,9 @@
                         <a class="page-scroll" href="#about">預約說明</a>
                     </li>
                     <li>
+                        <a class="page-scroll" href="#storeRank">店家排行</a>
+                    </li>
+                    <li>
                         <a class="page-scroll" href="#reserve">立刻預約</a>
                     </li>
                     <li>
@@ -136,7 +177,7 @@
                                 $StudentName = $_SESSION['StudentName'];
                                 if(empty($StudentName)) {
                                     echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
-                                    echo '<script type="text/javascript">alert("請登入會員!");';
+                                    echo '<script type="text/javascript">alert("請登入會員!");' ;
                                     echo 'window.location.href=\'index.php\'';
                                     echo '</script>';
                                 }
@@ -169,6 +210,39 @@
             <div class="col-md-4">
                 <h3>Step 3</h3>
                 <p>33333</p>
+            </div>
+        </div>
+    </section>
+
+    <!--店家排行-->
+    <section id="storeRank" class="content-section text-center">
+        <div class="container">
+            <div class="row">
+                <!--左-->
+                <div class="col-md-6 ">
+                    <h2>店家排行榜</h2>
+                    <input name="printNumber" id="printNumber" value="1(預設)" type="text" style="width:150px; max-width:150px;" />
+                </div>
+                <!--右-->
+                <div class="col-md-6">
+                    <h2>動態評分</h2>
+                    
+                    <h2>我要評分</h2>
+                    <select name="rateStoreName" id="rateStoreName"  style="width:250px; max-width:250px;">
+                        <option value="影印店1" selected="selected">影印店1</option>
+                        <option value="影印店2">影印店2</option>
+                        <option value="影印店3">影印店3</option>
+                        <option value="影印店4">影印店4</option>
+                        <option value="影印店5">影印店5</option>
+                        <option value="影印店6">影印店6</option>
+                        <option value="影印店7">影印店7</option>
+                        <option value="影印店8">影印店8</option>
+                        <option value="影印店9">影印店9</option>
+                        <option value="影印店10">影印店10</option>
+                    </select><br><br>
+                    <div id="stars"></div><span id="title"></span><br><br>
+                    <a id="rateBtn" class="btn btn-danger btn-lg" onclick="rateStore()" >送出評分</a>
+                </div>
             </div>
         </div>
     </section>
@@ -265,6 +339,7 @@
             </div>
         </div>
     </section>
+
     <!-- Email -->
     <div class="modal fade" id="contactEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width: 30%;">
@@ -314,7 +389,7 @@
     </div>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqrMwTfxxHPl6Qcf7QgcGWiE_3C76oviY&sensor=false"></script>
-    <script src="js/jquery.js"></script>
+    
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.easing.min.js"></script>
     <script src="js/grayscale.js"></script>
