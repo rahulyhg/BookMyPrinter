@@ -32,6 +32,8 @@
             });
         });
 
+        
+
         function fun1() {
             if (document.getElementById('printAll').value == "自訂列印頁數") {
                 document.getElementById("pageNumber").value = "請輸入頁數";
@@ -59,14 +61,24 @@
                 error: function (xhr) {
                     alert('評分失敗');
                 },
-                success: function () {
+                success: function (response) {
                     alert('評分成功');
+                    $("#rankBoard").html(response);
                 }
             });
             
         }
 
         function initial() {
+            setInterval(function () {
+                $.ajax({
+                    method: "POST",
+                    url: "rateStore.php"
+                }).done(function (data) {
+                    $("#rankBoard").html(data);
+                })
+            }, 1000);
+
             $('#checkBtn').click(function (){
                 $('#checkCol0').html($('#fileURL').val());
                 $('#checkCol1').html($('#pageNumber').val());
@@ -221,12 +233,12 @@
                 <!--左-->
                 <div class="col-md-6 ">
                     <h2>店家排行榜</h2>
-                    <input name="printNumber" id="printNumber" value="1(預設)" type="text" style="width:150px; max-width:150px;" />
+                    
                 </div>
                 <!--右-->
-                <div class="col-md-6">
-                    <h2>動態評分</h2>
-                    
+                <div class="col-md-6" style="text-align: center;">
+                    <p style="width: auto; height: 160px; max-height: 160px; overflow: hidden;" id="rankBoard"></p>
+
                     <h2>我要評分</h2>
                     <select name="rateStoreName" id="rateStoreName"  style="width:250px; max-width:250px;">
                         <option value="影印店1" selected="selected">影印店1</option>
@@ -389,7 +401,6 @@
     </div>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqrMwTfxxHPl6Qcf7QgcGWiE_3C76oviY&sensor=false"></script>
-    
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.easing.min.js"></script>
     <script src="js/grayscale.js"></script>
