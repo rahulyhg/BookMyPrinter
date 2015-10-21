@@ -2,8 +2,8 @@
     header('content-Type: text/html; charset=utf-8');
     session_start();
     $StudentName = $_SESSION['StudentName'];
-    $rateStoreName = $_POST[rateStoreName];
-    $rateScore = $_POST[rateScore];
+    $rateStoreName = $_POST['rateStoreName'];
+    $rateScore = $_POST['rateScore'];
     if($rateScore) { //有人按了評分
         /*require_once 'config.php';
     
