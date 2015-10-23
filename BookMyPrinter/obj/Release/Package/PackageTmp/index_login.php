@@ -13,6 +13,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/grayscale.css" rel="stylesheet" />
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/bootstrap-table.css" />
     <script src="js/jquery.js"></script>
     <script src="js/jquery.raty.js"></script>
     <script type="text/javascript">
@@ -31,8 +32,6 @@
                 }
             });
         });
-
-        
 
         function fun1() {
             if (document.getElementById('printAll').value == "自訂列印頁數") {
@@ -70,7 +69,23 @@
         }
 
         function initial() {
-            setInterval(function () {
+            $.ajax({ //先call一次排行
+                method: "POST",
+                url: "storeRank.php"
+            }).done(function (data) {
+                $("#rankContent").html(data);
+            })
+            
+            setInterval(function () { //每5分鐘call排行
+                $.ajax({
+                    method: "POST",
+                    url: "storeRank.php"
+                }).done(function (data) {
+                    $("#rankContent").html(data);
+                })
+            }, 60000);
+
+            setInterval(function () { //每1秒call及時評分
                 $.ajax({
                     method: "POST",
                     url: "rateStore.php"
@@ -233,7 +248,18 @@
                 <!--左-->
                 <div class="col-md-6 ">
                     <h2>店家排行榜</h2>
-                    
+                    <table id="events-id2" data-toggle="table" >
+                        <thead>
+                            <tr>
+                                <th>排行</th>
+                                <th>店家名稱</th>
+                                <th>累積得分</th>
+                                <th>平均得分</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankContent">
+                        </tbody>
+                    </table>
                 </div>
                 <!--右-->
                 <div class="col-md-6" style="text-align: center;">
@@ -404,7 +430,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.easing.min.js"></script>
     <script src="js/grayscale.js"></script>
-    
+    <script src="js/bootstrap-table.js"></script>
 
 
 

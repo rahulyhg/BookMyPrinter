@@ -1,13 +1,14 @@
 
 <?php
+    include_once("mailer.php"); 
     header("Content-Type:text/html; charset=utf-8");
-    $Name = $_POST[name];
-    $StudentID = $_POST[studentID];
-    $pwd1 = $_POST[password1];
-    $pwd2 = $_POST[password2];
-    $Dept = $_POST[department];
-    $Email = $_POST[email];
-    $Phone = $_POST[phone];
+    $Name = $_POST['name'];
+    $StudentID = $_POST['studentID'];
+    $pwd1 = $_POST['password1'];
+    $pwd2 = $_POST['password2'];
+    $Dept = $_POST['department'];
+    $Email = $_POST['email'];
+    $Phone = $_POST['phone'];
     
     if(strcmp($pwd1, $pwd2)) {
         echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
@@ -29,10 +30,11 @@
         $num_rows = mysql_num_rows($result) + 1;
         $query = mysql_query("SELECT StudentID FROM member WHERE StudentID='$StudentID'"  , $conn);
         if(mysql_num_rows($query) == 0) {
-            $sqlstr = "INSERT INTO `member`(`ID`, `StudentName`, `StudentID`, `Password`, `Department`, `Email`, `Phone`) VALUES ('$num_rows', '$Name', '$StudentID', '$pwd1', '$Dept', '$Email', '$Phone')";
+            $Key=sendmail($Email);
+            $sqlstr = "INSERT INTO `member`(`ID`, `StudentName`, `StudentID`, `Password`, `Department`, `Email`, `Phone`, `verifycode`) VALUES ('$num_rows', '$Name', '$StudentID', '$pwd1', '$Dept', '$Email', '$Phone', '$Key')";
             if(mysql_query($sqlstr, $conn)) {
                 echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
-                echo '<script type="text/javascript">alert("成功加入會員!");';
+                echo '<script type="text/javascript">alert("成功加入會員!請至信箱收取驗證碼!");';
                 echo 'history.back()';
                 echo '</script>';
             } else {

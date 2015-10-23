@@ -1,8 +1,8 @@
 
 <?php
     header("Content-Type:text/html; charset=utf-8");
-    $StudentID = $_POST[studentID];
-    $pwd = $_POST[password];
+    $StudentID = $_POST['studentID'];
+    $pwd = $_POST['password'];
     require_once 'config.php';
 
     $conn = mysql_connect($db_host, $db_user, $db_pass);
@@ -15,14 +15,22 @@
     $row = mysql_fetch_assoc($result);
     if($row["Password"] ==$pwd)
     {
-        echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
-        echo '<script type="text/javascript">alert("登入成功!");';
-        session_start();
-        $StudentName = $row["StudentName"];
-        $_SESSION['StudentName'] = $StudentName;
-        $_SESSION['StudentID'] = $StudentID;
-        echo 'window.location.href=\'index_login.php\'';
-        echo '</script>';   
+        if($row["verifycode"] == 0){
+
+            echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
+            echo '<script type="text/javascript">alert("登入成功!");';
+            session_start();
+            $StudentName = $row["StudentName"];
+            $_SESSION['StudentName'] = $StudentName;
+            $_SESSION['StudentID'] = $StudentID;
+            echo 'window.location.href=\'index_login.php\'';
+            echo '</script>';
+        }else{
+            echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
+            echo '<script type="text/javascript">alert("此帳號未驗證！");';
+            echo 'history.back()';
+            echo '</script>';
+        }  
     }
     else {
         echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';

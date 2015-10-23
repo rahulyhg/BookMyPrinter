@@ -1,5 +1,7 @@
 <?php
     header("Content-Type:text/html; charset=utf-8");
+    session_start();
+    session_destroy();
     /*require_once 'config.php';
 
     $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
@@ -116,6 +118,7 @@
                         <p id="memberZone">
                             <a data-toggle="modal" data-target="#regist" class="btn btn-primary btn-lg"><span>加入會員</span></a>
                             <a data-toggle="modal" data-target="#login" class="btn btn-success btn-lg"><span>登入會員</span></a>
+                            <a data-toggle="modal" data-target="#verify" class="btn btn-verify btn-lg"><span>驗證碼輸入</span></a>
                         </p>
                     </div>
                 </div>
@@ -179,6 +182,26 @@
                 </div>
             </div>
         </div>
+                <!-- 驗證碼輸入畫面 -->
+                <div class="modal fade" id="verify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width: 30%;">
+                        <div class="modal-content">
+                            <h2 style="color:black;">驗證碼輸入</h2>
+                            <form method="post" action="verify.php" style="color:black;">
+                                <b>帳號</b>：
+                                <input name="studentID" type="text" required="required" style="width:50%; max-width:50%;" />
+                                <br /><br />
+                                <b>驗證碼</b>：
+                                <input name="verifycode" type="text" required="required" style="width:50%; max-width:50%;" />
+                                <br /><br />
+                                <div style="text-align:center;">
+                                    <input type="submit" class="btn btn-success" value="確認" />
+                                </div>
+                            </form>
+                            <br />
+                        </div>
+                    </div>
+                </div>
     </header>
 
     <!-- 關於平台 -->
