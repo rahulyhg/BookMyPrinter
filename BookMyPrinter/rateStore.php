@@ -30,7 +30,7 @@
             echo file_get_contents("rateFile.txt");;
         }
         else {
-        echo "Error: " . mysql_error();
+            echo "Error: " . mysql_error();
         }
         fclose($conn);
     }
