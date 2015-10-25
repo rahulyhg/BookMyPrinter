@@ -41,7 +41,7 @@
     <title>預約印表機平台</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/grayscale.css" rel="stylesheet" />
+    <link href="css/index.css" rel="stylesheet" />
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/bootstrap-table.css" />
     <script type="text/javascript">

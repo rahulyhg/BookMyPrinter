@@ -1,6 +1,14 @@
 <?php
     header("Content-Type:text/html; charset=utf-8");
     session_start();
+
+    $StudentName = $_SESSION['StudentName'];
+    if(empty($StudentName)) {
+        echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
+        echo '<script type="text/javascript">alert("請登入會員!");' ;
+        echo 'window.location.href=\'index.php\'';
+        echo '</script>';
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,7 +19,7 @@
     <title>預約印表機平台</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/grayscale.css" rel="stylesheet" />
+    <link href="css/index.css" rel="stylesheet" />
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/bootstrap-table.css" />
     <script src="js/jquery.js"></script>
@@ -63,6 +71,12 @@
                 success: function (response) {
                     alert('評分成功');
                     $("#rankBoard").html(response);
+                    $.ajax({ //更新一次排行榜
+                        method: "POST",
+                        url: "storeRank.php"
+                    }).done(function (data) {
+                        $("#rankContent").html(data);
+                    })
                 }
             });
             
@@ -76,14 +90,14 @@
                 $("#rankContent").html(data);
             })
             
-            setInterval(function () { //每5分鐘call排行
+            setInterval(function () { //每3分鐘call排行
                 $.ajax({
                     method: "POST",
                     url: "storeRank.php"
                 }).done(function (data) {
                     $("#rankContent").html(data);
                 })
-            }, 60000);
+            }, 18000);
 
             setInterval(function () { //每1秒call及時評分
                 $.ajax({
@@ -134,19 +148,6 @@
             });
         }
     </script>
-    <style>
-        span {
-            font-family: Microsoft JhengHei;
-        }
-        option, select, textarea, input{
-            color: black;
-            font-family: Microsoft JhengHei;
-        }
-        ::selection{
-	        background: black;
-	        color: white;
-        }
-    </style>
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" onload="initial()">
@@ -169,10 +170,13 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">預約說明</a>
+                        <a class="page-scroll" href="#about">關於預約</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#storeRank">店家排行</a>
+                        <a class="page-scroll" href="#storeRank">店家評比</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#map">店家位置</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#reserve">立刻預約</a>
@@ -201,13 +205,6 @@
                         </p>
                         <p>
                             <?php
-                                $StudentName = $_SESSION['StudentName'];
-                                if(empty($StudentName)) {
-                                    echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
-                                    echo '<script type="text/javascript">alert("請登入會員!");' ;
-                                    echo 'window.location.href=\'index.php\'';
-                                    echo '</script>';
-                                }
                                 echo $StudentName;
                             ?>
                             你好 !
@@ -225,18 +222,20 @@
     <!-- 關於平台 -->
     <section id="about" class="container content-section text-center">
         <div class="row">
-            <h2>預約說明</h2>
+            <h2>關於平台</h2>
+            <h4>我們提供線上預約影印服務</h4>
+            <hr>
             <div class="col-md-4">
-                <h3>Step 1</h3>
-                <p>上傳檔案</p>
+                <h3>在家線上下單</h3>
+                <img src="img/text.png" />
             </div>
             <div class="col-md-4">
-                <h3>Step 2</h3>
-                <p>2222</p>
+                <h3>商店通知取件</h3>
+                <img src="img/mail.png" />
             </div>
             <div class="col-md-4">
-                <h3>Step 3</h3>
-                <p>33333</p>
+                <h3>現場取件付款</h3>
+                <img src="img/shop.png" />
             </div>
         </div>
     </section>
@@ -244,17 +243,19 @@
     <!--店家排行-->
     <section id="storeRank" class="content-section text-center">
         <div class="container">
+            <h2>店家評比</h2>
+            <hr>
             <div class="row">
                 <!--左-->
                 <div class="col-md-6 ">
-                    <h2>店家排行榜</h2>
+                    <h3>店家排行榜</h3>
                     <table id="events-id2" data-toggle="table" >
                         <thead>
                             <tr>
-                                <th>排行</th>
-                                <th>店家名稱</th>
-                                <th>累積得分</th>
-                                <th>平均得分</th>
+                                <th data-halign="center">排行</th>
+                                <th data-halign="center">店家名稱</th>
+                                <th data-halign="center">累積得分</th>
+                                <th data-halign="center">平均得分</th>
                             </tr>
                         </thead>
                         <tbody id="rankContent">
@@ -265,7 +266,7 @@
                 <div class="col-md-6" style="text-align: center;">
                     <p style="width: auto; height: 160px; max-height: 160px; overflow: hidden;" id="rankBoard"></p>
 
-                    <h2>我要評分</h2>
+                    <h3>我要評分</h3>
                     <select name="rateStoreName" id="rateStoreName"  style="width:250px; max-width:250px;">
                         <option value="影印店1" selected="selected">影印店1</option>
                         <option value="影印店2">影印店2</option>
@@ -285,9 +286,13 @@
         </div>
     </section>
 
+    <!-- Map Section -->
+    <div style="width:100%;" id="map"></div>
+
     <!-- 預約影印 -->
     <section id="reserve" class="content-section container text-center">
         <h2 style="text-align: center;">預約影印</h2>
+        <hr>
         <form>
             <p><b>上傳檔案</b><p>
             <a class="btn btn-success btn-lg" onclick="uploadFile()"><span style="font-family: Microsoft JhengHei;">點我開啟上傳檔案系統</span></a><br><br>
@@ -361,36 +366,37 @@
         </form>      
     </section>
 
-    <!--聯絡我們-->
+    <!--關於我們-->
     <section id="contact" class="content-section text-center">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h2>聯絡我們</h2>
-                    <a data-toggle="modal" data-target="#contactEmail" class="btn btn-default btn-lg">
-                        <i class="fa fa-google fa-fw"></i><span class="network-name">Gmail</span>
-                    </a><br><br>
-                    <a href="https://www.facebook.com/tzu.h.chen.1" class="btn btn-default btn-lg">
-                        <i class="fa fa-facebook fa-fw"></i><span class="network-name">Facebook</span>
-                    </a>
+            <div class="row" >
+                <h2>關於我們</h2>
+                <hr>
+                <div class="col-md-3">
+                    <div class="photo" id="p1"></div><br />
+                    <h3>陳自泓</h3>
+                    <h4>資訊系大四</h4>
+                </div>
+                <div class="col-md-3">
+                    <div class="photo" id="p2"></div><br />
+                    <h3>陳恩平</h3>
+                    <h4>工資管大四</h4>
+                </div>
+                <div class="col-md-3">
+                    <div class="photo" id="p3"></div><br />
+                    <h3>韓承勳</h3>
+                    <h4>資訊系大四</h4>
+                </div>
+                <div class="col-md-3">
+                    <div class="photo" id="p4"></div><br />
+                    <h3>劉皓平</h3>
+                    <h4>電機系大四</h4>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Email -->
-    <div class="modal fade" id="contactEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 30%;">
-            <div class="modal-content" style="color: black; padding-left:15%;">
-                <br><h3>E-mail連結</h3>
-                <p>xxhomey19@mail.com</p>
-                <p>來信請備註"影印機預約平台" :)</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Map Section -->
-    <div style="width:100%;" id="map"></div>
+    
 
     <!-- Footer -->
     <footer>
