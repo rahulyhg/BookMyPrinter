@@ -314,6 +314,7 @@
                 </div>
             </div>
         </div>
+        <a data-toggle="modal" data-target="#contactEmail" id="checkBtn" class="btn btn-danger btn-lg">寄信給我們</a>
     </section>
 
     <!-- Footer -->
@@ -322,6 +323,28 @@
             <p>Copyright &copy; BookMyPrinter 2015</p>
         </div>
     </footer>
+
+    <!-- 寄信給我們 -->
+    <div class="modal fade" id="contactEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 30%;">
+            <div class="modal-content text-center">
+                <br>
+                <h3 style="color:black;">寄信給我們</h3>
+                <form method="post" action="emailus.php" style="color:black;">
+                    <b>您的信箱</b>：
+                    <input name="userEmail" type="text" required="required" style="width:50%; max-width:50%;" />
+                    <br /><br />
+                    <b>內容</b>：
+                    <textarea name="EmailContent" style="width: 50%; max-width:50%; height: 80px;"></textarea>
+                    <br /><br />
+                    <div style="text-align:center;">
+                        <input type="submit" class="btn btn-success" value="送出" />
+                    </div>
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqrMwTfxxHPl6Qcf7QgcGWiE_3C76oviY&sensor=false"></script>
     <script src="js/jquery.js"></script>

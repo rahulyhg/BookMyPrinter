@@ -30,7 +30,7 @@
         $num_rows = mysql_num_rows($result) + 1;
         $query = mysql_query("SELECT StudentID FROM member WHERE StudentID='$StudentID'"  , $conn);
         if(mysql_num_rows($query) == 0) {
-            $Key=sendmail($Email);
+            $Key=sendmail($Email,'GETKEY');
             $sqlstr = "INSERT INTO `member`(`ID`, `StudentName`, `StudentID`, `Password`, `Department`, `Email`, `Phone`, `verifycode`) VALUES ('$num_rows', '$Name', '$StudentID', '$pwd1', '$Dept', '$Email', '$Phone', '$Key')";
             if(mysql_query($sqlstr, $conn)) {
                 echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';

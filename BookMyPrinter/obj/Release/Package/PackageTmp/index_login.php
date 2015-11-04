@@ -1,14 +1,14 @@
 <?php
-    header("Content-Type:text/html; charset=utf-8");
-    session_start();
+header("Content-Type:text/html; charset=utf-8");
+session_start();
 
-    $StudentName = $_SESSION['StudentName'];
-    if(empty($StudentName)) {
-        echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
-        echo '<script type="text/javascript">alert("請登入會員!");' ;
-        echo 'window.location.href=\'index.php\'';
-        echo '</script>';
-    }
+$StudentName = $_SESSION['StudentName'];
+if(empty($StudentName)) {
+    echo '<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">';
+    echo '<script type="text/javascript">alert("請登入會員!");' ;
+    echo 'window.location.href=\'index.php\'';
+    echo '</script>';
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +26,7 @@
     <script src="js/jquery.raty.js"></script>
     <script type="text/javascript">
         var rateScore;
-        $(function () { //評分星星
+        $(function () {
             $("#stars").raty({
                 number: 5,
                 path: 'img',
@@ -51,7 +51,7 @@
             }
         }
 
-        function uploadFile() { //上傳檔案
+        function uploadFile() {
             window.open('https://script.google.com/macros/s/AKfycbzzfCpKIzJcWD90R7JtAzUZpUJOqeAi6GVuNAhGXYFEdISLvRU/exec', '上傳檔案系統', config='height=300,width=300');
         }
 
@@ -122,12 +122,12 @@
                 $('#checkCol10').html($('#takeoffTime').val());
             });
 
-            $('#logout').click(function (){ //登出
+            $('#logout').click(function (){
                 alert("登出成功");
                 window.location.href='index.php';
             });
 
-            $('#confirmBtn').click(function (){ //確認訂單
+            $('#confirmBtn').click(function (){
                 $.ajax({
                     url: 'checkReservation.php',
                     cache: false,
@@ -140,8 +140,7 @@
                     error: function(xhr) {
                         alert('Ajax request 發生錯誤');
                     },
-                    success: function (response) {
-                        alert(response);
+                    success: function() {
                         alert('預約完成！');
                         parent.location.reload();
                     }
@@ -206,7 +205,7 @@
                         </p>
                         <p>
                             <?php
-                                echo $StudentName;
+                            echo $StudentName;
                             ?>
                             你好 !
                         </p>
@@ -395,18 +394,10 @@
                 </div>
             </div>
         </div>
+        <a data-toggle="modal" data-target="#contactEmail"  id="checkBtn" class="btn btn-danger btn-lg">寄信給我們</a>
     </section>
 
-    <!--關於我們-->
-    <section id="contact" class="content-section text-center">
-        <div class="container">
-            <h2>意見回饋</h2>
-            <hr>
-            <a data-toggle="modal" data-target="#doubleCheck" class="btn btn-danger btn-lg">意見回饋</a>
-        </div>
-    </section>
 
-    
 
     <!-- Footer -->
     <footer>
@@ -439,6 +430,28 @@
                     <a id="confirmBtn" class="btn btn-danger btn-lg" >確認送出</a>
                 </div><br>
             </div>
+        </div>
+    </div>
+
+    <!-- 寄信給我們 -->
+    <div class="modal fade" id="contactEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 30%;">
+           <div class="modal-content text-center">
+              <br>
+              <h3 style="color:black;">寄信給我們</h3>
+                 <form method="post" action="emailus.php" style="color:black;">
+                    <b>您的信箱</b>：
+                    <input name="userEmail" type="text" required="required" style="width:50%; max-width:50%;" />
+                    <br /><br />
+                    <b>內容</b>：
+                    <textarea  name="EmailContent" style="width: 50%; max-width:50%; height: 80px;"></textarea>
+                    <br /><br />
+                    <div style="text-align:center;">
+                        <input type="submit" class="btn btn-success" value="送出" />
+                    </div>
+                </form>
+                 <br />
+             </div>
         </div>
     </div>
 
