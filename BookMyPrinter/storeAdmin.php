@@ -25,9 +25,12 @@
         $str .= '<td>'. $row["studentID"] .'</td>';
         $str .= '<td>'. $row["takeoffTime"] .'</td>';
         $str .= '<td><a data-toggle="modal" data-target="#printInfo" style="height:100%; cursor: pointer;" id="checkInfoBtn'. $row["ID"] .'">
-                    詳細列印資訊</a></td></tr>';
+                    詳細列印資訊</a></td>';
+        $str .= '<td id="situation">'. $row["situation"] .'</td>';
+        $str .= '</tr>';
         $js .= '$(\'#checkInfoBtn'. $row["ID"]. '\').click(function (){
                     checkInfo('. $row["ID"] .');
+                    selectID = " '. $row["ID"] .' ";
                 });';
     }
     fclose($conn);
@@ -45,7 +48,8 @@
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/bootstrap-table.css" />
     <script type="text/javascript">
-
+        var selectID;
+        var tmp;
         function initial() {
             $('#logout').click(function (){
                 alert("登出成功");
@@ -53,6 +57,39 @@
             });
 
             <?php echo $js;  ?>
+
+            $('#acceptBtn').click(function (){ //接受訂單
+                $.ajax({
+                    url: 'acceptReservation.php',
+                    cache: false,
+                    dataType: 'html',
+                    type:'POST',
+                    data: { ID: selectID, accept: 1},
+                    error: function(xhr) {
+                        alert('Ajax request 發生錯誤');
+                    },
+                    success: function(response) {
+                        alert("已接受訂單");
+                        $('#situation').empty().append(response);
+                    }
+                });
+            });
+
+            $('#rejectBtn').click(function (){ //拒絕訂單
+                $.ajax({
+                    url: 'acceptReservation.php',
+                    dataType: 'html',
+                    type:'POST',
+                    data: { ID: selectID, accept: 0},
+                    error: function(xhr) {
+                        alert('Ajax request 發生錯誤');
+                    },
+                    success: function(response) {
+                        alert("已拒絕訂單");
+                        $('#situation').empty().append(response);
+                    }
+                });
+            });
 
             $('#printInfo').on('hidden.bs.modal', function () {
                 $('#checkCol0').empty().append("資料處理中...");
@@ -152,9 +189,6 @@
                         <a class="page-scroll" href="#list">查看預約</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#contact">聯絡我們</a>
-                    </li>
-                    <li>
                         <a style="cursor: pointer;" id="logout">登出</a>
                     </li>
                 </ul>
@@ -205,6 +239,7 @@
                             <th data-sortable="true">學號</th>
                             <th data-sortable="true">取件時間</th>
                             <th data-sortable="true">詳細列印資訊</th>
+                            <th data-sortable="true">狀態</th>
                             <th data-formatter="operateFormatter" data-events="operateEvents">操作選項</th>
                         </tr>
                     </thead>
@@ -215,39 +250,6 @@
             </div>
         </div>
     </section>
-
-    <!--聯絡我們-->
-    <section id="contact" class="content-section text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <h2>聯絡我們</h2>
-                    <a data-toggle="modal" data-target="#contactEmail" class="btn btn-default btn-lg">
-                        <i class="fa fa-google fa-fw"></i>
-                        <span class="network-name">Gmail</span>
-                    </a>
-                    <br />
-                    <br />
-                    <a href="https://www.facebook.com/tzu.h.chen.1" class="btn btn-default btn-lg">
-                        <i class="fa fa-facebook fa-fw"></i>
-                        <span class="network-name">Facebook</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Email -->
-    <div class="modal fade" id="contactEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 30%;">
-            <div class="modal-content" style="color: black; padding-left:15%;">
-                <br />
-                <h3>E-mail連結</h3>
-                <p>xxhomey19@mail.com</p>
-                <p>來信請備註"影印機預約平台" :)</p>
-            </div>
-        </div>
-    </div>
-
 
     <!-- Footer -->
     <footer>
@@ -275,7 +277,8 @@
                 </div>
                 <div class="text-center">
                     <br>
-                    <a id="closemBtn" class="btn btn-danger btn-lg " data-dismiss="modal" >關閉</a>
+                    <a id="acceptBtn" class="btn btn-success btn-lg " data-dismiss="modal">接受訂單</a>
+                    <a id="rejectBtn" class="btn btn-danger btn-lg " data-dismiss="modal" >拒絕訂單</a>
                 </div><br>
             </div>
         </div>

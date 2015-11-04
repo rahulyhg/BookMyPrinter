@@ -26,7 +26,7 @@
     <script src="js/jquery.raty.js"></script>
     <script type="text/javascript">
         var rateScore;
-        $(function () {
+        $(function () { //評分星星
             $("#stars").raty({
                 number: 5,
                 path: 'img',
@@ -51,7 +51,7 @@
             }
         }
 
-        function uploadFile() {
+        function uploadFile() { //上傳檔案
             window.open('https://script.google.com/macros/s/AKfycbzzfCpKIzJcWD90R7JtAzUZpUJOqeAi6GVuNAhGXYFEdISLvRU/exec', '上傳檔案系統', config='height=300,width=300');
         }
 
@@ -122,12 +122,12 @@
                 $('#checkCol10').html($('#takeoffTime').val());
             });
 
-            $('#logout').click(function (){
+            $('#logout').click(function (){ //登出
                 alert("登出成功");
                 window.location.href='index.php';
             });
 
-            $('#confirmBtn').click(function (){
+            $('#confirmBtn').click(function (){ //確認訂單
                 $.ajax({
                     url: 'checkReservation.php',
                     cache: false,
@@ -140,7 +140,8 @@
                     error: function(xhr) {
                         alert('Ajax request 發生錯誤');
                     },
-                    success: function() {
+                    success: function (response) {
+                        alert(response);
                         alert('預約完成！');
                         parent.location.reload();
                     }
@@ -393,6 +394,15 @@
                     <h4>電機系大四</h4>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!--關於我們-->
+    <section id="contact" class="content-section text-center">
+        <div class="container">
+            <h2>意見回饋</h2>
+            <hr>
+            <a data-toggle="modal" data-target="#doubleCheck" class="btn btn-danger btn-lg">意見回饋</a>
         </div>
     </section>
 

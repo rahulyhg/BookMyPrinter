@@ -18,6 +18,8 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="acceptReservation.php" />
+    <Compile Include="checkReservation.php" />
     <Compile Include="storeRank.php" />
     <Compile Include="rateStore.php" />
     <Compile Include="reservationInfo.php" />
@@ -27,7 +29,6 @@
     <Compile Include="config.php" />
     <Compile Include="storeLogin.php" />
     <Compile Include="login.php" />
-    <Compile Include="checkReservation.php" />
     <Compile Include="register.php" />
   </ItemGroup>
   <ItemGroup>

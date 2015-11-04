@@ -1,4 +1,4 @@
-    <?php
+<?php
     header('content-Type: text/html; charset=utf-8');
     session_start();
     $studentName = $_SESSION['StudentName'];
@@ -30,7 +30,7 @@
             echo file_get_contents("rateFile.txt");;
         }
         else {
-        echo "Error: " . mysql_error();
+            echo "Error: " . mysql_error();
         }
         fclose($conn);
     }
